@@ -29,7 +29,7 @@ pipeline {
       steps {
         //"docker build -t sharma201718/currency-exchange-devops:$env.BUILD_TAG"
         script {
-          dockerImage = docker.build("sharma201718/demo-k8s:${env.BUILD_TAG}")
+          dockerImage = docker.build("sharma201718/demo-k8s:${env.BUILD_NUMBER}")
         }
 
       }
@@ -38,9 +38,9 @@ pipeline {
     stage('Push Docker Image') {
       steps {
         script {
-          docker.withRegistry('', 'id-docker-cred') {
-            dockerImage.push();
-            dockerImage.push('latest');
+          docker.withRegistry('https://index.docker.io/v1/', 'id-docker-cred') {
+            dockerImage.push("${env.BUILD_NUMBER}")
+            dockerImage.push('latest')
           }
         }
       }
